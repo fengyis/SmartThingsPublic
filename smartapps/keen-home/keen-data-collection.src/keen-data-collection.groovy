@@ -28,12 +28,9 @@ definition(
 preferences {
     section("Allow Endpoint to Control These Things...") {
         input "vents", "capability.temperatureMeasurement", title: "Select all of your vents", multiple: true
-        href "http://keenhome.io"
+    
     }
-    section("Stat Collection...") {
-        label name: "statsURI", title: "Stats URI", required: true
-        // input name: "statUri", title: "Enter URI", multiple: false, required: true
-    }
+
 }
 
 def installed() {
@@ -66,9 +63,9 @@ def initialize(updated) {
     log.trace "initialize()"
 
     subscribe(vents, "temperature", handleTemperature)
-    subscribe(vents, "level", handleLevel)
+    
     subscribe(vents, "pressure", handlePressure)
-    subscribe(vents, "battery", handleBatteries)
+
 	subscribe(vents, "humidity", handleHumidity)
 
     initializeVents(updated)
@@ -82,52 +79,34 @@ def initializeVents(updated) {
 
 def handleTemperature(evt) {
     log.trace "handleTemperature()"
-    sendEventData(evt, "temperature", evt.numericValue)
+    log.debug "temperature is ${evt.numericValue}"
+   // sendEventData(evt, "temperature", evt.numericValue)
 }
 
 def handleHumidity(evt) {
     log.trace "handleHuymidity()"
     log.debug "humidity json: ${evt.longValue }"
-    sendEventData(evt, "humidity", evt.longValue)
+   // sendEventData(evt, "humidity", evt.longValue)
 }
 
-def handleLevel(evt) {
-    log.trace "handleLevel()"
-    sendEventData(evt, "level", evt.numericValue)
-}
 
 def handlePressure(evt) {
     log.trace "handlePressure()"
-    sendEventData(evt, "pressure", evt.numericValue)
+    log.debug "pressure is ${evt.numericValue}"
+ //   sendEventData(evt, "pressure", evt.numericValue)
 }
 
-def handleBatteries(evt) {
-    log.trace "handleBatteries()"
-    sendEventData(evt, "battery", evt.numericValue)
-}
+
 
 def sendEventData(evt, tag, value) {
     log.trace "sendEventData()"
     
-    def vent = vents.find { it.id == evt.deviceId }
-    def zigbeeId = vent.currentValue("zigbeeId")
+
     log.debug "\tdeviceId: ${evt.deviceId}"
     log.debug "\tzigbeeId: ${zigbeeId}"
     log.debug "\tdevice name:  ${evt.displayName }"
-//    log.devug "\tvalue: ${value}"
+   log.devug "\tvalue: ${value}"
     
-    httpPostJson(uri: statsURI, 
-        path: "/devices/" + zigbeeId + '/' + tag,
-        body: [
-            date: evt.isoDate,
-            value: value,
-            name: evt.displayName 
-            ])
-    {
-        log.debug "tag '${tag}' successfully posted"
-    }
-}
-
-def packageData(data) {
 
 }
+
