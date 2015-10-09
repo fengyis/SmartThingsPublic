@@ -13,6 +13,9 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
+ 
+ 
+ 
 definition(
     name: "SmartSwitch",
     namespace: "fengyis",
