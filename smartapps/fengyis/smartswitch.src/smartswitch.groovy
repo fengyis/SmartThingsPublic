@@ -34,7 +34,8 @@ preferences {
      
 	}
     section("Stat Collection...") {
-        label name: "statsURI", title: "Stats URI", required: true
+    	paragraph "http://icsl.ee.columbia.edu:8000/api/EnergyReport/nwc1008/SavePlug"
+        label name: "statsURI", title: "Stats URI (include http://)", required: true
         // input name: "statUri", title: "Enter URI", multiple: false, required: true
     }
 }
