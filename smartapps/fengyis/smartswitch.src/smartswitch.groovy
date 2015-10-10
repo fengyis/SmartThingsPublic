@@ -33,6 +33,10 @@ preferences {
         input "outlet", "capability.switch", title: "outlet", required: true, multiple: false
      
 	}
+    section("Stat Collection...") {
+        label name: "statsURI", title: "Stats URI", required: true
+        // input name: "statUri", title: "Enter URI", multiple: false, required: true
+    }
 }
 
 def installed() {
@@ -96,10 +100,9 @@ def powerHandler(evt) {
 def SendEventData(evt){
 try {
     def params = [
-    uri: "http://104.209.176.250:8000/api/smartthings/SaveEnergy",
+    uri: statsURI,
     body: [
     	"name":"switch",
-        "room":"nwc1008",
         "power":state.power,
         "energy":state.diff
     ]
@@ -110,6 +113,7 @@ try {
         }
         //log.debug "response contentType: ${resp.contentType}"
     }
+
 } catch (e) {
     log.debug "something went wrong: $e"
 }
